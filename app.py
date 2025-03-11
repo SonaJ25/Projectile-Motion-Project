@@ -1,8 +1,6 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
-import json
-
 
 # Streamlit app title
 st.title("Projectile Motion Simulation")
@@ -12,11 +10,11 @@ st.sidebar.header("Initial Conditions")
 x_i = 0  # Initial X-position (fixed)
 y_i = st.sidebar.slider("Initial Y-position (m)", 0, 100, 0)
 V_i = st.sidebar.slider("Initial Velocity (m/s)", 0, 150, 100)
-theta = st.sidebar.slider("Launch Angle (degrees)", 0, 90, 75)
+theta = st.sidebar.slider("Launch Angle (degrees)", 0, 90, 60)
 
 # Air resistance
 st.sidebar.header("Air Resistance")
-air_resist_const = st.sidebar.slider("Air Resistance Constant", 0.0, 0.2, 0.05)
+air_resist_const = st.sidebar.slider("Air Resistance Constant", 0.0, 0.2, 0.0)
 #air_resist_type = st.sidebar.radio("Resistance Type", [1, 2], index=0)
 air_resist_type = 1
 
@@ -88,35 +86,19 @@ while new_y >= 0:
 
     i += 1
 
-
-
-# Embed GlowScript VPython in an iframe
-projectile_data = json.dumps({"x": x_data, "y": y_data, "t": time_data})
-
-simulation_script = f"""
-<script>
-    var projectileData = {projectile_data};
-
-    function startSimulation() {{
-        // This function will be used in GlowScript to animate the projectile
-        console.log("Data received:", projectileData);
-    }}
-</script>
-"""
-
-st.components.v1.html(simulation_script, height=0)  # Inject JavaScript
-
-glowscript_url = "https://www.glowscript.org/#/user/jonas.kingery25/folder/MyPrograms/program/projectile"
-st.components.v1.iframe(glowscript_url, width=800, height=500)
-
 # Plot results using Streamlit
 
 st.subheader("Y vs X (Projectile Path)")
 fig1, ax1 = plt.subplots()
 ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
 ax1.axhline(0, color="black")  # Ground level
-ax1.set_xlim(-100, 2500)
-ax1.set_ylim(0, 1550)
+if max(x_data) < 500:
+    ax1.set_xlim(-20, 500)
+    ax1.set_ylim(0, 600)
+
+else:
+    ax1.set_xlim(-100, 2500)
+    ax1.set_ylim(0, 1600)
 ax1.set_xlabel("X-axis (m)")
 ax1.set_ylabel("Y-axis (m)")
 ax1.legend()
