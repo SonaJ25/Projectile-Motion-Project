@@ -102,14 +102,14 @@ ax1.scatter([x_data[i] for i in indices], [y_data[i] for i in indices], color='b
 # Plot velocity arrows
 ax1.quiver(
     [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-    [10*Vx_data[i] for i in indices], [10*Vy_data[i] for i in indices],  # Vector components
+    [100*Vx_data[i] for i in indices], [100*Vy_data[i] for i in indices],  # Vector components
     color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
 )
 
 # Plot acceleration arrows
 ax1.quiver(
     [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-    [Ax_data[i] for i in indices], [Ay_data[i] for i in indices],  # Vector components
+    [100*Ax_data[i] for i in indices], [100*Ay_data[i] for i in indices],  # Vector components
     color="red", angles="xy", scale_units="xy", scale=20, width=0.005, label="Acceleration"
 )
 
