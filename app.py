@@ -126,13 +126,13 @@ if st.session_state.scatter_toggle:
 if st.session_state.vectors_toggle:
     ax1.quiver(
         [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-        [20 * Vx_data[i] for i in indices], [20 * Vy_data[i] for i in indices],  # Vector components
+        [10 * Vx_data[i] for i in indices], [10 * Vy_data[i] for i in indices],  # Vector components
         color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
     )
 
     ax1.quiver(
         [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-        [100 * Ax_data[i] for i in indices], [100 * Ay_data[i] for i in indices],  # Vector components
+        [150 * Ax_data[i] for i in indices], [150 * Ay_data[i] for i in indices],  # Vector components
         color="red", angles="xy", scale_units="xy", scale=20, width=0.005, label="Acceleration"
     )
 
