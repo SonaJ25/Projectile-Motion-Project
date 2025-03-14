@@ -89,54 +89,67 @@ while new_y >= 0:
 # Plot results using Streamlit
 
 st.subheader("Y vs X (Projectile Path)")
+
 fig1, ax1 = plt.subplots()
 
+# Initialize session state variables if they don’t exist
+if "plot_toggle" not in st.session_state:
+    st.session_state.plot_toggle = False
+if "scatter_toggle" not in st.session_state:
+    st.session_state.scatter_toggle = False
+if "vectors_toggle" not in st.session_state:
+    st.session_state.vectors_toggle = False
 
-plot_toggle_on = st.button("Plot Line On")
-if plot_toggle_on:
+# Define button logic to toggle states
+if st.button("Toggle Trajectory"):
+    st.session_state.plot_toggle = not st.session_state.plot_toggle
+
+if st.button("Toggle Key Points"):
+    st.session_state.scatter_toggle = not st.session_state.scatter_toggle
+
+if st.button("Toggle Vectors"):
+    st.session_state.vectors_toggle = not st.session_state.vectors_toggle
+
+# Plot trajectory if toggled on
+if st.session_state.plot_toggle:
     ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
 
-
-# Choose specific time steps to plot velocity and acceleration vectors
-time_steps = np.arange(0, max(time_data), 0.75)  # Every 0.5 seconds
+# Choose specific time steps for markers and vectors
+time_steps = np.arange(0, max(time_data), 0.75)  # Every 0.75 seconds
 indices = [np.argmin(np.abs(np.array(time_data) - t)) for t in time_steps]  # Find closest indices
 
-# Plot markers at selected time steps
-scatter_toggle_on = st.button("Key Points On")
-if scatter_toggle_on:
+# Plot key points if toggled on
+if st.session_state.scatter_toggle:
     ax1.scatter([x_data[i] for i in indices], [y_data[i] for i in indices], color='black', label="Key Points")
 
-
-vectors_toggle_on = st.button("Turn Vectors On")
-if vectors_toggle_on:
-
-# Plot velocity arrows
+# Plot velocity and acceleration vectors if toggled on
+if st.session_state.vectors_toggle:
     ax1.quiver(
         [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-        [10*Vx_data[i] for i in indices], [10*Vy_data[i] for i in indices],  # Vector components
+        [10 * Vx_data[i] for i in indices], [10 * Vy_data[i] for i in indices],  # Vector components
         color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
     )
 
-# Plot acceleration arrows
     ax1.quiver(
         [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-        [100*Ax_data[i] for i in indices], [100*Ay_data[i] for i in indices],  # Vector components
+        [100 * Ax_data[i] for i in indices], [100 * Ay_data[i] for i in indices],  # Vector components
         color="red", angles="xy", scale_units="xy", scale=20, width=0.005, label="Acceleration"
     )
 
-
+# Formatting
 ax1.axhline(0, color="black")  # Ground level
 if max(x_data) < 500:
     ax1.set_xlim(-20, 500)
     ax1.set_ylim(0, 600)
-
 else:
     ax1.set_xlim(-100, 2500)
     ax1.set_ylim(0, 1600)
+
 ax1.set_xlabel("X-axis (m)")
 ax1.set_ylabel("Y-axis (m)")
 ax1.legend()
 st.pyplot(fig1)
+
 
 
 st.subheader("Velocity vs Time")
