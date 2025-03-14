@@ -115,7 +115,7 @@ if st.session_state.plot_toggle:
     ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
 
 # Choose specific time steps for markers and vectors
-time_steps = np.arange(0, max(time_data), 0.75)  # Every 0.75 seconds
+time_steps = np.arange(0, max(time_data), 1.5)  # Every 0.75 seconds
 indices = [np.argmin(np.abs(np.array(time_data) - t)) for t in time_steps]  # Find closest indices
 
 # Plot key points if toggled on
