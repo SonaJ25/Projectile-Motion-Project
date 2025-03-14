@@ -94,7 +94,7 @@ fig1, ax1 = plt.subplots()
 
 # Initialize session state variables if they don’t exist
 if "plot_toggle" not in st.session_state:
-    st.session_state.plot_toggle = False
+    st.session_state.plot_toggle = True
 if "scatter_toggle" not in st.session_state:
     st.session_state.scatter_toggle = False
 if "vectors_toggle" not in st.session_state:
