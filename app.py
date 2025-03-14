@@ -90,7 +90,7 @@ while new_y >= 0:
 
 st.subheader("Y vs X (Projectile Path)")
 fig1, ax1 = plt.subplots()
-ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
+#ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
 
 # Choose specific time steps to plot velocity and acceleration vectors
 time_steps = np.arange(0, max(time_data), 0.75)  # Every 0.5 seconds
@@ -102,14 +102,14 @@ ax1.scatter([x_data[i] for i in indices], [y_data[i] for i in indices], color='b
 # Plot velocity arrows
 ax1.quiver(
     [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-    [100*Vx_data[i] for i in indices], [100*Vy_data[i] for i in indices],  # Vector components
+    [30*Vx_data[i] for i in indices], [30*Vy_data[i] for i in indices],  # Vector components
     color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
 )
 
 # Plot acceleration arrows
 ax1.quiver(
     [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-    [100*Ax_data[i] for i in indices], [100*Ay_data[i] for i in indices],  # Vector components
+    [500*Ax_data[i] for i in indices], [500*Ay_data[i] for i in indices],  # Vector components
     color="red", angles="xy", scale_units="xy", scale=20, width=0.005, label="Acceleration"
 )
 
