@@ -93,7 +93,7 @@ fig1, ax1 = plt.subplots()
 ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
 
 # Choose specific time steps to plot velocity and acceleration vectors
-time_steps = np.arange(0, max(time_data), 1)  # Every 0.5 seconds
+time_steps = np.arange(0, max(time_data), 2)  # Every 0.5 seconds
 indices = [np.argmin(np.abs(np.array(time_data) - t)) for t in time_steps]  # Find closest indices
 
 # Plot markers at selected time steps
