@@ -93,7 +93,7 @@ fig1, ax1 = plt.subplots()
 
 
 plot_toggle_on = st.button("Plot Line (On")
-if plot_toggle:
+if plot_toggle_on:
     ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
 
 plot_toggle_off = st.button("Plot Line (On", disabled=False)
