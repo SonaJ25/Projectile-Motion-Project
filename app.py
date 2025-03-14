@@ -92,9 +92,12 @@ st.subheader("Y vs X (Projectile Path)")
 fig1, ax1 = plt.subplots()
 
 
-plot_toggle = st.button("Plot Line (On/Off")
+plot_toggle_on = st.button("Plot Line (On")
 if plot_toggle:
     ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
+
+plot_toggle_off = st.button("Plot Line (On", disabled=False)
+
 
 # Choose specific time steps to plot velocity and acceleration vectors
 time_steps = np.arange(0, max(time_data), 0.75)  # Every 0.5 seconds
