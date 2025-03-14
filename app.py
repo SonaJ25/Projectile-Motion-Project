@@ -91,6 +91,29 @@ while new_y >= 0:
 st.subheader("Y vs X (Projectile Path)")
 fig1, ax1 = plt.subplots()
 ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
+
+# Choose specific time steps to plot velocity and acceleration vectors
+time_steps = np.arange(0, max(time_data), 1)  # Every 0.5 seconds
+indices = [np.argmin(np.abs(np.array(time_data) - t)) for t in time_steps]  # Find closest indices
+
+# Plot markers at selected time steps
+ax1.scatter([x_data[i] for i in indices], [y_data[i] for i in indices], color='black', label="Key Points")
+
+# Plot velocity arrows
+ax1.quiver(
+    [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
+    [Vx_data[i] for i in indices], [Vy_data[i] for i in indices],  # Vector components
+    color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
+)
+
+# Plot acceleration arrows
+ax1.quiver(
+    [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
+    [Ax_data[i] for i in indices], [Ay_data[i] for i in indices],  # Vector components
+    color="red", angles="xy", scale_units="xy", scale=20, width=0.005, label="Acceleration"
+)
+
+
 ax1.axhline(0, color="black")  # Ground level
 if max(x_data) < 500:
     ax1.set_xlim(-20, 500)
