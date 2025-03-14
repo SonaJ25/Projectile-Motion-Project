@@ -141,7 +141,7 @@ ax1.axhline(0, color="black")  # Ground level
 
 if max(x_data) < 500:
     ax1.set_xlim(-20, 500)
-    ax1.set_ylim(0, 600)
+    ax1.set_ylim(0, 800)
 elif max(x_data) < 1000:
     ax1.set_xlim(-100, 1000)
     ax1.set_ylim(0, 1000)
