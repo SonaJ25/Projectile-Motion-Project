@@ -126,7 +126,7 @@ if st.session_state.scatter_toggle:
 if st.session_state.vectors_toggle:
     ax1.quiver(
         [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-        [10 * Vx_data[i] for i in indices], [10 * Vy_data[i] for i in indices],  # Vector components
+        [20 * Vx_data[i] for i in indices], [20 * Vy_data[i] for i in indices],  # Vector components
         color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
     )
 
@@ -138,9 +138,13 @@ if st.session_state.vectors_toggle:
 
 # Formatting
 ax1.axhline(0, color="black")  # Ground level
+
 if max(x_data) < 500:
     ax1.set_xlim(-20, 500)
     ax1.set_ylim(0, 600)
+elif max(x_data) < 1000:
+    ax1.set_xlim(-100, 1000)
+    ax1.set_ylim(0, 1000)
 else:
     ax1.set_xlim(-100, 2500)
     ax1.set_ylim(0, 1600)
