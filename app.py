@@ -102,7 +102,7 @@ ax1.scatter([x_data[i] for i in indices], [y_data[i] for i in indices], color='b
 # Plot velocity arrows
 ax1.quiver(
     [x_data[i] for i in indices], [y_data[i] for i in indices],  # Starting points
-    [Vx_data[i] for i in indices], [Vy_data[i] for i in indices],  # Vector components
+    [10*Vx_data[i] for i in indices], [10*Vy_data[i] for i in indices],  # Vector components
     color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
 )
 
