@@ -139,7 +139,10 @@ if st.session_state.vectors_toggle:
 # Formatting
 ax1.axhline(0, color="black")  # Ground level
 
-if max(x_data) < 500:
+if max(x_data) < 100:
+    ax1.set_xlim(-10, 100)
+    ax1.set_ylim(0, 200)
+elif max(x_data) < 500:
     ax1.set_xlim(-20, 500)
     ax1.set_ylim(0, 800)
 elif max(x_data) < 1000:
