@@ -108,7 +108,7 @@ if scatter_toggle_on:
 
 
 vectors_toggle_on = st.button("Turn Vectors On")
-if plot_toggle_on:
+if vectors_toggle_on:
 
 # Plot velocity arrows
     ax1.quiver(
