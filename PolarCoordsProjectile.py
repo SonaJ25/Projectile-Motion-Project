@@ -181,14 +181,14 @@ ax1.legend()
 st.pyplot(fig1)
 
 
-st.subheader("Velocity vs Time")
+st.subheader("Speed vs Time")
 fig2, ax2 = plt.subplots()
 ax2.plot(time_data, V_data, label="Total Speed", color="purple")
 #ax2.plot(time_data, V_data*np.sin(theta_data), label="Y Velocity", color="blue")
 #ax2.plot(time_data, V_data*np.cos(theta_data), label="X Velocity", color="red")
 ax2.axhline(0, color="black")
 ax2.set_xlabel("Time (s)")
-ax2.set_ylabel("Velocity (m/s)")
+ax2.set_ylabel("Speed (m/s)")
 ax2.legend()
 st.pyplot(fig2)
 
