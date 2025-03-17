@@ -167,9 +167,9 @@ if max(x_data) < 500:
     ax1.set_xlim(-20, 500)
     ax1.set_ylim(0, 800)
 
-elif max(x_data) < 800:
-    ax1.set_xlim(-20, 800)
-    ax1.set_ylim(0, 600)
+elif max(x_data) < 1000:
+    ax1.set_xlim(-100, 1000)
+    ax1.set_ylim(0, 1000)
 else:
     ax1.set_xlim(-100, 2500)
     ax1.set_ylim(0, 1600)
