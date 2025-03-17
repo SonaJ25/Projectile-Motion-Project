@@ -1,6 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Circle
 
 # Streamlit app title
 st.title("Projectile Motion using A_Parallel and A_Perpendicular")
@@ -10,7 +11,7 @@ st.sidebar.header("Initial Conditions")
 x_i = 0  # Initial X-position (fixed)
 y_i = st.sidebar.slider("Initial Y-position (m)", 0, 100, 0)
 V_i = st.sidebar.slider("Initial Velocity (m/s)", 10, 150, 100)
-theta = st.sidebar.slider("Launch Angle (degrees)", 0, 90, 45)
+theta = st.sidebar.slider("Launch Angle (degrees)", 10, 90, 45)
 
 # Air resistance
 st.sidebar.header("Air Resistance")
@@ -69,7 +70,11 @@ while y_new >= 0:
     A_para_new = -1 * air_resist_force(air_resist_const, V_new, air_resist_type) - g * np.sin(theta_data[i])
     A_para_data.append(A_para_new)
 
-    A_perp_new = -g * np.cos(theta_data[i])
+    if theta != 90:
+        A_perp_new = -g * np.cos(theta_data[i])
+    else:
+        A_perp_new = 0
+
     A_perp_data.append(A_perp_new)
 
 
@@ -97,14 +102,17 @@ while y_new >= 0:
 
 
     #Position Data
-    x_new = x_data[i] + delta_S_new * np.cos(theta_new)
+    if theta != 90:
+        x_new = x_data[i] + delta_S_new * np.cos(theta_new)
+    else:
+        x_new = 0
     y_new = y_data[i] + delta_S_new * np.sin(theta_new)
 
     x_data.append(x_new)
     y_data.append(y_new)
 
-    if i % 10 == 0:  # Print every 10 iterations
-        print(f"Iteration {i}: x={x_new}, y={y_new}, V={V_new}, theta={theta_new*180/np.pi}, delta_a={delta_a_new}")
+    #if i % 10 ==0:
+        #print(f"Iteration {i}: x={x_new}")
 
     time_data.append((i + 1) * time_interval)
 
@@ -114,17 +122,59 @@ while y_new >= 0:
 
 st.subheader("Y vs X (Projectile Path)")
 fig1, ax1 = plt.subplots()
-ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
 
+# Initialize session state variables if they don’t exist
+if "plot_toggle" not in st.session_state:
+    st.session_state.plot_toggle = True
+if "scatter_toggle" not in st.session_state:
+    st.session_state.scatter_toggle = False
+if "circles_toggle" not in st.session_state:
+    st.session_state.circles_toggle = False
+
+# Define button logic to toggle states
+if st.button("Toggle Trajectory"):
+    st.session_state.plot_toggle = not st.session_state.plot_toggle
+
+if st.button("Toggle Key Points"):
+    st.session_state.scatter_toggle = not st.session_state.scatter_toggle
+
+if st.button("Toggle Circles"):
+    st.session_state.circles_toggle = not st.session_state.circles_toggle
+
+if st.session_state.plot_toggle:
+    ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
+
+# Choose specific time steps for markers and circles
+time_steps = np.arange(0, max(time_data), 3)  # Every 1.5 seconds
+indices = [np.argmin(np.abs(np.array(time_data) - t)) for t in time_steps]  # Find the closest indices
+indices[0] = 1
+# Plot key points if toggled on
+if st.session_state.scatter_toggle:
+    ax1.scatter([x_data[i] for i in indices], [y_data[i] for i in indices], color='black', label="Key Points")
+
+# Plot circles if toggled on
+if st.session_state.circles_toggle:
+    for i in indices:
+        circle_data = Circle((circle_position_x_data[i], circle_position_y_data[i]), circle_radius_data[i], fill = False, edgecolor = 'red', linewidth = 2, alpha = 0.5)
+        ax1.add_patch(circle_data)
+
+    ax1.set_aspect('equal', adjustable='datalim')  # Prevents circles from being distorted
 
 ax1.axhline(0, color="black")  # Ground level
-if max(x_data) < 800:
+
+
+if max(x_data) < 500:
+    ax1.set_xlim(-20, 500)
+    ax1.set_ylim(0, 800)
+
+elif max(x_data) < 800:
     ax1.set_xlim(-20, 800)
     ax1.set_ylim(0, 600)
-
 else:
     ax1.set_xlim(-100, 2500)
     ax1.set_ylim(0, 1600)
+
+
 ax1.set_xlabel("X-axis (m)")
 ax1.set_ylabel("Y-axis (m)")
 ax1.legend()
@@ -133,7 +183,9 @@ st.pyplot(fig1)
 
 st.subheader("Velocity vs Time")
 fig2, ax2 = plt.subplots()
-ax2.plot(time_data, V_data, label="Velocity", color="blue")
+ax2.plot(time_data, V_data, label="Total Speed", color="purple")
+#ax2.plot(time_data, V_data*np.sin(theta_data), label="Y Velocity", color="blue")
+#ax2.plot(time_data, V_data*np.cos(theta_data), label="X Velocity", color="red")
 ax2.axhline(0, color="black")
 ax2.set_xlabel("Time (s)")
 ax2.set_ylabel("Velocity (m/s)")
@@ -145,7 +197,13 @@ st.subheader("Acceleration vs Time")
 fig3, ax3 = plt.subplots()
 ax3.plot(time_data, A_perp_data, label="A_perp", color="blue")
 ax3.plot(time_data, A_para_data, label="A_para", color="red")
-#ax3.plot(time_data, np.sqrt(A_perp_data**2 + A_para_data**2), label="sqrt(A_perp^2 + A_para^2)", color="purple")
+
+#combine_acceleration = []
+#for i in range(len(A_para_data)):
+    #ombine_acceleration.append(np.sqrt(A_para_data[i]**2 + A_perp_data[i]**2))
+
+#ax3.plot(time_data, combine_acceleration, label="Combined", color="purple")
+
 ax3.axhline(0, color="black")
 ax3.set_xlabel("Time (s)")
 ax3.set_ylabel("Acceleration (m/s²)")
