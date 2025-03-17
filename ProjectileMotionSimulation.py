@@ -163,7 +163,7 @@ ax2.plot(time_data, Vy_data, label="Vy", color="red")
 
 total_speed = []
 for i in range(len(Vx_data)):
-    total_speed.append(np.sqrt(Vx_data[i]**2 + Vy_data[i]**2)
+    total_speed.append(np.sqrt(Vx_data[i]**2 + Vy_data[i]**2))
 
 ax2.plot(time_data, total_speed, label = "Total Speed")
 ax2.axhline(0, color="black")
