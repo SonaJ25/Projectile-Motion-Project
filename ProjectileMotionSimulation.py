@@ -160,6 +160,12 @@ st.subheader("Velocity vs Time")
 fig2, ax2 = plt.subplots()
 ax2.plot(time_data, Vx_data, label="Vx", color="blue")
 ax2.plot(time_data, Vy_data, label="Vy", color="red")
+
+total_speed = []
+for i in range(len(Vx_data)):
+    total_speed.append(np.sqrt(Vx_data[i]**2 + Vy_data[i]**2)
+
+ax2.plot(time_data, total_speed, label = "Total Speed")
 ax2.axhline(0, color="black")
 ax2.set_xlabel("Time (s)")
 ax2.set_ylabel("Velocity (m/s)")
