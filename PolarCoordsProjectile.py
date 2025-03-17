@@ -11,7 +11,7 @@ st.sidebar.header("Initial Conditions")
 x_i = 0  # Initial X-position (fixed)
 y_i = st.sidebar.slider("Initial Y-position (m)", 0, 100, 0)
 V_i = st.sidebar.slider("Initial Velocity (m/s)", 10, 150, 100)
-theta = st.sidebar.slider("Launch Angle (degrees)", 10, 90, 45)
+theta = st.sidebar.slider("Launch Angle (degrees)", 0, 90, 60)
 
 # Air resistance
 st.sidebar.header("Air Resistance")
