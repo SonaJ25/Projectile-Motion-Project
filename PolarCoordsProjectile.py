@@ -11,7 +11,7 @@ st.sidebar.header("Initial Conditions")
 x_i = 0  # Initial X-position (fixed)
 y_i = st.sidebar.slider("Initial Y-position (m)", 0, 100, 0)
 V_i = st.sidebar.slider("Initial Velocity (m/s)", 10, 150, 100)
-theta = st.sidebar.slider("Launch Angle (degrees)", 0, 90, 60)
+theta = st.sidebar.slider("Launch Angle (degrees)", 10, 90, 45)
 
 # Air resistance
 st.sidebar.header("Air Resistance")
@@ -130,6 +130,8 @@ if "scatter_toggle" not in st.session_state:
     st.session_state.scatter_toggle = False
 if "circles_toggle" not in st.session_state:
     st.session_state.circles_toggle = False
+if "single_point_toggle" not in st.session_state:
+    st.session_state.single_point_toggle = False
 
 # Define button logic to toggle states
 if st.button("Toggle Trajectory"):
@@ -141,11 +143,14 @@ if st.button("Toggle Key Points"):
 if st.button("Toggle Circles"):
     st.session_state.circles_toggle = not st.session_state.circles_toggle
 
+if st.button("Toggle Single Point Data and Circle"):
+    st.session_state.single_point_toggle = not st.session_state.single_point_toggle
+
 if st.session_state.plot_toggle:
     ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
 
 # Choose specific time steps for markers and circles
-time_steps = np.arange(0, max(time_data), 3)  # Every 1.5 seconds
+time_steps = np.arange(0, max(time_data), 2)  # Every 2 seconds
 indices = [np.argmin(np.abs(np.array(time_data) - t)) for t in time_steps]  # Find the closest indices
 indices[0] = 1
 # Plot key points if toggled on
@@ -160,18 +165,54 @@ if st.session_state.circles_toggle:
 
     ax1.set_aspect('equal', adjustable='datalim')  # Prevents circles from being distorted
 
+
+#Plot single data circle w/ acceleration and velocity
+
+if st.session_state.single_point_toggle:
+    if len(indices) < 6:
+        point = indices[len(indices) // 2 - 1]
+    else:
+        point = indices[len(indices) // 2 - 2]
+
+    print(indices)
+    print(point)
+    print(x_data[point])
+    ax1.quiver(
+        [x_data[point]], [y_data[point]],  # Starting points
+        [25*V_data[point]*np.cos(theta_data[point])], [25*V_data[point]*np.sin(theta_data[point])],  # Vector components
+        color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
+    )
+
+    ax1.quiver(
+        [x_data[point]], [y_data[point]],  # Starting points
+        [250*A_perp_data[point]*np.sin(-theta_data[point])], [250*A_perp_data[point]*np.cos(-theta_data[point])],  # Vector components
+        color="red", angles="xy", scale_units="xy", scale=20, width=0.005, label="A_Perpendicular"
+    )
+
+    ax1.quiver(
+        [x_data[point]], [y_data[point]],  # Starting points
+        [200*A_para_data[point]*np.cos(theta_data[point])], [200*A_para_data[point]*np.sin(theta_data[point])],  # Vector components
+        color="blue", angles="xy", scale_units="xy", scale=20, width=0.005, label="A_Parallel"
+    )
+
+    ax1.add_patch(Circle((circle_position_x_data[point], circle_position_y_data[point]), circle_radius_data[point], fill=False,
+        edgecolor='red', linewidth=2, alpha=0.5))
+
+    ax1.set_aspect('equal', adjustable='datalim')  # Prevents circles from being distorted
+
+
 ax1.axhline(0, color="black")  # Ground level
 
 
 if max(x_data) < 500:
     ax1.set_xlim(-20, 500)
-    ax1.set_ylim(0, 800)
+    ax1.set_ylim(0, 500)
 
-elif max(x_data) < 1000:
-    ax1.set_xlim(-100, 1000)
-    ax1.set_ylim(0, 1000)
+elif max(x_data) < 800:
+    ax1.set_xlim(-100, 800)
+    ax1.set_ylim(0, 600)
 else:
-    ax1.set_xlim(-100, 2500)
+    ax1.set_xlim(-300, 2500)
     ax1.set_ylim(0, 1600)
 
 
@@ -184,8 +225,6 @@ st.pyplot(fig1)
 st.subheader("Speed vs Time")
 fig2, ax2 = plt.subplots()
 ax2.plot(time_data, V_data, label="Total Speed", color="purple")
-#ax2.plot(time_data, V_data*np.sin(theta_data), label="Y Velocity", color="blue")
-#ax2.plot(time_data, V_data*np.cos(theta_data), label="X Velocity", color="red")
 ax2.axhline(0, color="black")
 ax2.set_xlabel("Time (s)")
 ax2.set_ylabel("Speed (m/s)")
@@ -198,11 +237,7 @@ fig3, ax3 = plt.subplots()
 ax3.plot(time_data, A_perp_data, label="A_perp", color="blue")
 ax3.plot(time_data, A_para_data, label="A_para", color="red")
 
-#combine_acceleration = []
-#for i in range(len(A_para_data)):
-    #ombine_acceleration.append(np.sqrt(A_para_data[i]**2 + A_perp_data[i]**2))
 
-#ax3.plot(time_data, combine_acceleration, label="Combined", color="purple")
 
 ax3.axhline(0, color="black")
 ax3.set_xlabel("Time (s)")
