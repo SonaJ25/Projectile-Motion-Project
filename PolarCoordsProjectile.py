@@ -65,6 +65,8 @@ while y_new >= 0:
 
     #Velocity and Acceleration Calculations
     V_new = V_data[i] + A_para_data[i] * time_interval
+    if V_new < 0:
+        V_new = -V_new
     V_data.append(V_new)
 
     A_para_new = -1 * air_resist_force(air_resist_const, V_new, air_resist_type) - g * np.sin(theta_data[i])
