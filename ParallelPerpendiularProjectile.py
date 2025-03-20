@@ -203,7 +203,7 @@ if st.session_state.single_point_toggle:
     ax1.quiver(
         [x_data[point]], [y_data[point]],  # Starting points
         [200*A_para_data[point]*np.cos(theta_data[point])], [200*A_para_data[point]*np.sin(theta_data[point])],  # Vector components
-        color="blue", angles="xy", scale_units="xy", scale=20, width=0.005, label="A_Parallel"
+        color="purple", angles="xy", scale_units="xy", scale=20, width=0.005, label="A_Parallel"
     )
 
     #Plot Single circle
@@ -213,7 +213,7 @@ if st.session_state.single_point_toggle:
     ax1.set_aspect('equal', adjustable='datalim')  # Prevents circles from being distorted
 
 
-ax1.axhline(0, color="black")  # Ground level
+ax1.axhline(0, color="black")  #Ground level
 
 #Axis Scaling
 if max(x_data) < 500:
@@ -240,7 +240,10 @@ st.pyplot(fig1)
 st.subheader("Speed vs Time")
 fig2, ax2 = plt.subplots()
 ax2.plot(time_data, V_data, label="Total Speed", color="purple")
-ax2.axhline(0, color="black")
+
+ax2.axhline(0, color="black")  #Ground level
+
+#Graph Labels
 ax2.set_xlabel("Time (s)")
 ax2.set_ylabel("Speed (m/s)")
 ax2.legend()
@@ -254,7 +257,7 @@ ax3.plot(time_data, A_perp_data, label="A_perp", color="blue")
 ax3.plot(time_data, A_para_data, label="A_para", color="red")
 
 
-ax3.axhline(0, color="black") # Ground level
+ax3.axhline(0, color="black") #Ground level
 
 #Graph Labels
 ax3.set_xlabel("Time (s)")
@@ -268,7 +271,9 @@ st.subheader("Position vs Time")
 fig4, ax4 = plt.subplots()
 ax4.plot(time_data, x_data, label="X Position", color="blue")
 ax4.plot(time_data, y_data, label="Y Position", color="red")
-ax4.axhline(0, color="black")
+ax4.axhline(0, color="black")#Ground level
+
+#Graph Labels
 ax4.set_xlabel("Time (s)")
 ax4.set_ylabel("Position (m)")
 ax4.legend()
