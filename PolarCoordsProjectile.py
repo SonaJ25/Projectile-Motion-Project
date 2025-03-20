@@ -1,12 +1,17 @@
+## Projectile Motion Simulation using Polar coordinates
+
+#Import python packages for extended functionality
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Circle
+__________________________________________________________________________________________________________________
+## Initial Conditions
 
 # Streamlit app title
 st.title("Projectile Motion using A_Parallel and A_Perpendicular")
 
-# Sidebar for user input
+# Sidebar for user input Initial Conditions
 st.sidebar.header("Initial Conditions")
 x_i = 0  # Initial X-position (fixed)
 y_i = st.sidebar.slider("Initial Y-position (m)", 0, 100, 0)
@@ -16,38 +21,38 @@ theta = st.sidebar.slider("Launch Angle (degrees)", 10, 80, 45)
 # Air resistance
 st.sidebar.header("Air Resistance")
 air_resist_const = st.sidebar.slider("Air Resistance Constant", 0.0, 0.2, 0.0)
-#air_resist_type = st.sidebar.radio("Resistance Type", [1, 2], index=0)
 air_resist_type = 1
+__________________________________________________________________________________________________________________
+## Calculating initial values
 
 # Convert angle to radians
 theta_rad = np.radians(theta)
 
+
 # Define air resistance function
 def air_resist_force(const, v, n):
     return const * (v ** n)
-
-
+    
 # Counteracting force due to air resistance
 counterForce_i = air_resist_force(air_resist_const, V_i, air_resist_type)
 
 
+#Initial acceleration values
 g = 9.81
 
 Ai_perp = -g * np.cos(theta_rad)
 Ai_para = -counterForce_i - (g * np.sin(theta_rad))
 
+__________________________________________________________________________________________________________________
+## Initializing data arrays and values for simulation
 
-# Data lists
 x_data, y_data = [x_i], [y_i]
 V_data = [V_i]
 A_perp_data, A_para_data = [Ai_perp], [Ai_para]
 theta_data = [theta_rad]
 
-
-
 circle_radius_i = V_i**2 / Ai_perp
 circle_radius_data = [circle_radius_i]
-
 
 circle_position_Xi = x_i + circle_radius_i * np.sin(theta_rad)
 circle_position_Yi = y_i - circle_radius_i * np.cos(theta_rad)
@@ -60,7 +65,10 @@ time_data = [0]
 time_interval = 0.01  # Time step*
 i, y_new = 0, 1  # Iteration counter
 
-# Simulation loop
+
+
+__________________________________________________________________________________________________________________
+## Simulation loop
 while y_new >= 0:
 
     #Velocity and Acceleration Calculations
@@ -81,7 +89,7 @@ while y_new >= 0:
     #Inscribed Circle Data/Calculations
     delta_S_new = V_data[i] * time_interval + 0.5 * A_para_data[i] * time_interval ** 2
 
-    epsilon = 1e-6
+    epsilon = 1e-6 #Avoid divide by zero error
     circle_radius_new = V_data[i] ** 2 / (abs(A_perp_data[i]) + epsilon)
     circle_radius_data.append(circle_radius_new)
 
@@ -101,7 +109,7 @@ while y_new >= 0:
     theta_data.append(theta_new)
 
 
-    #Position Data
+    #Projectile position Data
     if theta != 90:
         x_new = x_data[i] + delta_S_new * np.cos(theta_new)
     else:
@@ -110,20 +118,21 @@ while y_new >= 0:
 
     x_data.append(x_new)
     y_data.append(y_new)
-
-    #if i % 10 ==0:
-        #print(f"Iteration {i}: x={x_new}")
-
+    
+    #Time data
     time_data.append((i + 1) * time_interval)
 
     i += 1
 
-# Plot results using Streamlit
 
+__________________________________________________________________________________________________________________
+## Plot results using Streamlit
+
+# Trajectory Plot
 st.subheader("Y vs X (Projectile Path)")
 fig1, ax1 = plt.subplots()
 
-# Initialize session state variables if they don’t exist
+# Toggle buttons for data elements in trajectory plot
 if "plot_toggle" not in st.session_state:
     st.session_state.plot_toggle = True
 if "scatter_toggle" not in st.session_state:
@@ -133,7 +142,7 @@ if "circles_toggle" not in st.session_state:
 if "single_point_toggle" not in st.session_state:
     st.session_state.single_point_toggle = False
 
-# Define button logic to toggle states
+
 if st.button("Toggle Trajectory"):
     st.session_state.plot_toggle = not st.session_state.plot_toggle
 
@@ -145,6 +154,8 @@ if st.button("Toggle Circles"):
 
 if st.button("Toggle Single Point Data and Circle"):
     st.session_state.single_point_toggle = not st.session_state.single_point_toggle
+
+
 
 if st.session_state.plot_toggle:
     ax1.plot(x_data, y_data, label="Projectile Path", color="blue")
@@ -166,35 +177,35 @@ if st.session_state.circles_toggle:
     ax1.set_aspect('equal', adjustable='datalim')  # Prevents circles from being distorted
 
 
-#Plot single data circle w/ acceleration and velocity
-
+#Plot single point inscribed circle w/ acceleration and velocity
 if st.session_state.single_point_toggle:
     if len(indices) < 6:
         point = indices[len(indices) // 2 - 1]
     else:
         point = indices[len(indices) // 2 - 2]
 
-    print(indices)
-    print(point)
-    print(x_data[point])
+    #Velocity Vector
     ax1.quiver(
         [x_data[point]], [y_data[point]],  # Starting points
         [25*V_data[point]*np.cos(theta_data[point])], [25*V_data[point]*np.sin(theta_data[point])],  # Vector components
         color="green", angles="xy", scale_units="xy", scale=10, width=0.005, label="Velocity"
     )
 
+    #A_perpendicular vector
     ax1.quiver(
         [x_data[point]], [y_data[point]],  # Starting points
         [250*A_perp_data[point]*np.sin(-theta_data[point])], [250*A_perp_data[point]*np.cos(-theta_data[point])],  # Vector components
         color="red", angles="xy", scale_units="xy", scale=20, width=0.005, label="A_Perpendicular"
     )
 
+    #A_parallel vector
     ax1.quiver(
         [x_data[point]], [y_data[point]],  # Starting points
         [200*A_para_data[point]*np.cos(theta_data[point])], [200*A_para_data[point]*np.sin(theta_data[point])],  # Vector components
         color="blue", angles="xy", scale_units="xy", scale=20, width=0.005, label="A_Parallel"
     )
 
+    #Plot Single circle
     ax1.add_patch(Circle((circle_position_x_data[point], circle_position_y_data[point]), circle_radius_data[point], fill=False,
         edgecolor='red', linewidth=2, alpha=0.5))
 
@@ -203,7 +214,7 @@ if st.session_state.single_point_toggle:
 
 ax1.axhline(0, color="black")  # Ground level
 
-
+#Axis Scaling
 if max(x_data) < 500:
     ax1.set_xlim(-20, 500)
     ax1.set_ylim(0, 500)
@@ -215,12 +226,15 @@ else:
     ax1.set_xlim(-300, 2500)
     ax1.set_ylim(0, 1600)
 
-
+#Graph Labels
 ax1.set_xlabel("X-axis (m)")
 ax1.set_ylabel("Y-axis (m)")
 ax1.legend()
 st.pyplot(fig1)
 
+
+__________________________________________________________________________________________________________________
+# Plot 2, Speed v Time
 
 st.subheader("Speed vs Time")
 fig2, ax2 = plt.subplots()
@@ -231,21 +245,24 @@ ax2.set_ylabel("Speed (m/s)")
 ax2.legend()
 st.pyplot(fig2)
 
-
+__________________________________________________________________________________________________________________
+# Plot 3, Acceleration v Time
 st.subheader("Acceleration vs Time")
 fig3, ax3 = plt.subplots()
 ax3.plot(time_data, A_perp_data, label="A_perp", color="blue")
 ax3.plot(time_data, A_para_data, label="A_para", color="red")
 
 
+ax3.axhline(0, color="black") # Ground level
 
-ax3.axhline(0, color="black")
+#Graph Labels
 ax3.set_xlabel("Time (s)")
 ax3.set_ylabel("Acceleration (m/s²)")
 ax3.legend()
 st.pyplot(fig3)
 
-
+__________________________________________________________________________________________________________________
+#Plot 4, Position vs Time
 st.subheader("Position vs Time")
 fig4, ax4 = plt.subplots()
 ax4.plot(time_data, x_data, label="X Position", color="blue")
