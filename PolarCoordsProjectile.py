@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Circle
 __________________________________________________________________________________________________________________
-## Initial Conditions
+## Initial Conditions/Setup
 
 # Streamlit app title
 st.title("Projectile Motion using A_Parallel and A_Perpendicular")
