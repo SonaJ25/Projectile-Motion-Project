@@ -1,11 +1,17 @@
+## Projectile Motion Simulation using Cartesian coordinates
+
+#Import python packages for extended functionality
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
 
+__________________________________________________________________________________________________________________
+## Initial Conditions/Setup
+
 # Streamlit app title
 st.title("Projectile Motion Simulation")
 
-# Sidebar for user input
+# Sidebar for user input Initial Conditions
 st.sidebar.header("Initial Conditions")
 x_i = 0  # Initial X-position (fixed)
 y_i = st.sidebar.slider("Initial Y-position (m)", 0, 100, 0)
@@ -15,8 +21,13 @@ theta = st.sidebar.slider("Launch Angle (degrees)", 0, 90, 60)
 # Air resistance
 st.sidebar.header("Air Resistance")
 air_resist_const = st.sidebar.slider("Air Resistance Constant", 0.0, 0.2, 0.0)
-#air_resist_type = st.sidebar.radio("Resistance Type", [1, 2], index=0)
 air_resist_type = 1
+
+__________________________________________________________________________________________________________________
+## Calculating initial values
+
+g = 9.81
+
 
 # Convert angle to radians
 theta_rad = np.radians(theta)
@@ -40,7 +51,7 @@ if theta == 90:
 else:
     Ax_initial = counterForce_i * np.cos(theta_rad)
 
-Ay_initial = counterForce_i * np.sin(theta_rad) + 9.81
+Ay_initial = counterForce_i * np.sin(theta_rad) + g
 
 # Data lists
 x_data, y_data = [x_i], [y_i]
@@ -76,7 +87,7 @@ while new_y >= 0:
 
     else:
         new_theta = np.arctan(new_Vy / new_Vx)
-    new_Ay = -counterForce * np.sin(new_theta) - 9.81
+    new_Ay = -counterForce * np.sin(new_theta) - g
     Ay_data.append(new_Ay)
 
     new_Ax = -counterForce * np.cos(new_theta)
