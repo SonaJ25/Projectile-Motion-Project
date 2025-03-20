@@ -90,7 +90,7 @@ while y_new >= 0:
     #Inscribed Circle Data/Calculations
     delta_S_new = V_data[i] * time_interval + 0.5 * A_para_data[i] * time_interval ** 2
 
-    epsilon = 1e-6 #Avoid divide by zero error
+    epsilon = 1e-6 #Avoid dividing by zero error
     circle_radius_new = V_data[i] ** 2 / (abs(A_perp_data[i]) + epsilon)
     circle_radius_data.append(circle_radius_new)
 
@@ -123,7 +123,7 @@ while y_new >= 0:
     #Time data
     time_data.append((i + 1) * time_interval)
 
-    i += 1
+    i += 1 #Iteration Counter
 
 
 #################################################################################################################
